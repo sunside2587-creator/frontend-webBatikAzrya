@@ -9,7 +9,7 @@ function dualModeEntryPlugin() {
       handler(html) {
         return html.replace(
           /<!-- VITE_ENTRY_START -->[\s\S]*?<!-- VITE_ENTRY_END -->/,
-          '<script type="module" src="/src/main.jsx"></script>'
+          '<script type="module" src="/src/main.tsx"></script>'
         );
       },
     },
@@ -23,6 +23,7 @@ export default defineConfig({
     host: true,
   },
   build: {
+    modulePreload: false,
     rollupOptions: {
       output: {
         entryFileNames: 'assets/app.js',
