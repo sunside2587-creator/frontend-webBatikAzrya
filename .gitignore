@@ -1,6 +1,9 @@
 node_modules/
+.agent/
+.agents/
 .env
 .env.local
 .env.*.local
 *.log
 .DS_Store
+Frontend-PRD-A26-CS087.md
