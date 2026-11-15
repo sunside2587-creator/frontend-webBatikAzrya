@@ -251,7 +251,7 @@ export function PosPage({ embedded = false }: PosPageProps) {
           <div className="space-y-4 text-sm">
             <div className="flex flex-wrap gap-2">
               <Badge variant="soga">Segmen: {detailTrx.pelanggan_tipe}</Badge>
-              <Badge variant="sage">Metode: {detailTrx.metode_bayar}</Badge>
+              <Badge variant="soga">Metode: {detailTrx.metode_bayar}</Badge>
               <Badge variant={getPaymentStatusMeta(detailTrx.status_bayar).badgeVariant}>
                 Status: {getPaymentStatusMeta(detailTrx.status_bayar).label}
               </Badge>
