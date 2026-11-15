@@ -7,10 +7,10 @@ import {
   ShieldCheck,
   UserCheck,
 } from 'lucide-react';
-import { BatikDarkBackdrop, BatikSectionDivider } from '../components/ui/BatikOrnaments';
+import { BatikDarkBackdrop } from '../components/ui/BatikOrnaments';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { BUSINESS_CONSTANTS } from '../constants';
+import { BUSINESS_CONSTANTS, IS_DEV_TOOLS_VISIBLE } from '../constants';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/useToast';
 import type { User } from '../types';
@@ -108,22 +108,22 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
               </div>
 
               <h1 className="font-display mt-8 text-2xl font-bold leading-snug text-canvas-50">
-                Masuk ke Ruang Kerja Usaha
+                Masuk ke ruang kerja
               </h1>
               <p className="mt-2 text-sm leading-relaxed text-sage-200/90">
-                Menu navigasi disesuaikan otomatis berdasarkan peran Pemilik UMKM atau Admin/Kasir sesuai aturan akses sistem.
+                Menu yang tampil menyesuaikan peran Anda, Pemilik atau Kasir.
               </p>
             </div>
 
             <div className="space-y-2.5 rounded-xl border border-soga-600/35 bg-forest-800/80 p-4 text-xs text-sage-200">
               <p className="font-semibold uppercase tracking-wider text-soga-400">
-                Hak Akses Peran
+                Hak akses
               </p>
               <p>
-                <strong>Pemilik (Owner):</strong> Akses penuh POS, OCR Nota, Kalkulator HPP, dan Dashboard AI.
+                <strong>Pemilik:</strong> semua menu, termasuk Kalkulator HPP dan Laporan.
               </p>
               <p>
-                <strong>Admin / Kasir:</strong> Akses operasional POS Penjualan dan Pengeluaran Nota OCR.
+                <strong>Kasir:</strong> menu Kasir dan Nota Belanja.
               </p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
         <div className="p-6 sm:p-8 lg:col-span-7">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="font-display text-xl font-bold text-forest-900">
-              Formulir Masuk
+              Masuk
             </h2>
             {user ? (
               <span className="rounded-full border border-sage-400/70 bg-sage-200/40 px-3 py-1 text-xs font-semibold text-forest-900">
@@ -144,12 +144,12 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
           {apiError ? (
             <div
               role="alert"
-              className="mt-4 flex items-start gap-3 rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-900"
+              className="mt-4 flex items-start gap-3 rounded-xl border border-danger-300 bg-danger-50 p-4 text-sm text-danger-900"
             >
-              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-700" />
+              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-danger-700" />
               <div>
-                <p className="font-semibold">Gagal Masuk (UNAUTHORIZED)</p>
-                <p className="mt-0.5 text-red-800">{apiError}</p>
+                <p className="font-semibold">Gagal masuk</p>
+                <p className="mt-0.5 text-danger-800">{apiError}</p>
               </div>
             </div>
           ) : null}
@@ -176,7 +176,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
               <div
                 className={cn(
                   'flex min-h-11 items-center rounded-lg border bg-white px-3 focus-within:ring-2 focus-within:ring-soga-700',
-                  formErrors.password ? 'border-red-600' : 'border-soga-400/70'
+                  formErrors.password ? 'border-danger-600' : 'border-soga-400/70'
                 )}
               >
                 <input
@@ -204,7 +204,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
                 </button>
               </div>
               {formErrors.password ? (
-                <p role="alert" className="text-xs font-medium text-red-700">
+                <p role="alert" className="text-xs font-medium text-danger-700">
                   {formErrors.password}
                 </p>
               ) : null}
@@ -218,45 +218,53 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
               className="w-full"
             >
               <KeyRound className="h-4 w-4" />
-              <span>Masuk ke Sistem</span>
+              <span>Masuk</span>
             </Button>
           </form>
 
-          <BatikSectionDivider label="Akun Demo Pengujian US-01" className="my-6" />
-
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => handleFillDemoAccount('owner', false)}
+          <div className="mt-6 rounded-xl border border-dashed border-soga-600/40 bg-canvas-50 p-4">
+            <p className="text-sm font-semibold text-forest-900">Akun demo</p>
+            <p className="mt-0.5 text-xs text-forest-800/75">
+              Isi otomatis email dan kata sandi{' '}
+              <code className="rounded bg-canvas-100 px-1.5 py-0.5 font-semibold">
+                {BUSINESS_CONSTANTS.DEMO_PASSWORD}
+              </code>
+              , lalu tekan Masuk.
+            </p>
+            <div
+              className={cn(
+                'mt-3 grid grid-cols-1 gap-2.5',
+                IS_DEV_TOOLS_VISIBLE ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
+              )}
             >
-              <ShieldCheck className="h-4 w-4" />
-              <span>Isi Pemilik</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleFillDemoAccount('cashier', false)}
-            >
-              <UserCheck className="h-4 w-4" />
-              <span>Isi Kasir</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleFillDemoAccount('owner', true)}
-              className="border-red-300 text-red-800 hover:bg-red-50"
-            >
-              <span>Uji Sandi Salah</span>
-            </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleFillDemoAccount('owner', false)}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>Pemilik</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleFillDemoAccount('cashier', false)}
+              >
+                <UserCheck className="h-4 w-4" />
+                <span>Kasir</span>
+              </Button>
+              {IS_DEV_TOOLS_VISIBLE ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleFillDemoAccount('owner', true)}
+                  className="text-danger-700 hover:bg-danger-50"
+                >
+                  <span>Uji sandi salah (dev)</span>
+                </Button>
+              ) : null}
+            </div>
           </div>
-          <p className="mt-2.5 text-xs text-forest-800/75">
-            Kata sandi akun demo lokal:{' '}
-            <code className="rounded bg-canvas-100 px-1.5 py-0.5 font-semibold">
-              {BUSINESS_CONSTANTS.DEMO_PASSWORD}
-            </code>
-            .
-          </p>
         </div>
       </div>
     </div>

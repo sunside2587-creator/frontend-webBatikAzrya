@@ -5,6 +5,13 @@ import type {
   ScrollspyGroupConfig,
 } from '../types';
 
+/** Tombol uji (sandi salah, fallback AI) hanya tampil saat `npm run dev`. */
+export const IS_DEV_TOOLS_VISIBLE = import.meta.env.DEV;
+
+/** Pengalih peran demo tampil saat dev atau jika VITE_DEMO_MODE=true. */
+export const IS_DEMO_MODE =
+  import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true';
+
 export const API_ENDPOINTS = {
   HEALTH: '/health',
   AUTH_LOGIN: '/auth/login',

@@ -2,6 +2,7 @@ import { useCallback, useRef } from 'react';
 import { Eye } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
 import { ScrollspyBar } from '../../components/ui/ScrollspyBar';
 import { TableSkeleton } from '../../components/ui/Skeleton';
 import { EXPENSE_CATEGORY_GROUPS } from '../../constants';
@@ -57,13 +58,13 @@ export function ExpenseHistorySection({
     <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
       <div className="space-y-3 lg:col-span-8">
         <h2 className="font-display text-xl font-bold text-forest-900">
-          Riwayat Pengeluaran &amp; Bukti Nota
+          Riwayat pengeluaran
         </h2>
 
         {isLoading ? <TableSkeleton rows={3} /> : null}
 
         {!isLoading && expenses.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-soga-600/50 bg-white p-8 text-center">
+          <div className="rounded-2xl border border-dashed border-soga-600/40 bg-white p-8 text-center">
             <p className="text-sm font-medium text-forest-800">
               Belum ada riwayat pengeluaran tercatat.
             </p>
@@ -80,7 +81,7 @@ export function ExpenseHistorySection({
                 scrollProgress={scrollProgress}
                 groups={scrollspyGroups}
                 activeGroupKey={activeGroupKey}
-                ariaLabel="Navigasi Scrollspy kategori pengeluaran"
+                ariaLabel="Lompat ke kategori pengeluaran"
                 onSelectGroup={handleJumpToGroup}
               />
             ) : null}
@@ -106,10 +107,10 @@ export function ExpenseHistorySection({
                       expenseItemRefs.current[idx] = el;
                     }}
                     className={cn(
-                      'flex flex-col justify-between gap-3 rounded-xl border bg-white p-4 shadow-soft transition-colors sm:flex-row sm:items-center',
+                      'flex flex-col justify-between gap-3 rounded-2xl border bg-white p-4 shadow-soft transition-colors sm:flex-row sm:items-center',
                       isSpyRow
                         ? 'border-soga-600/50 border-l-4 border-l-soga-700 bg-canvas-50/70'
-                        : 'border-soga-600/35'
+                        : 'border-soga-600/30'
                     )}
                   >
                     <div className="space-y-1">
@@ -119,7 +120,7 @@ export function ExpenseHistorySection({
                           {categoryMeta.label}
                         </Badge>
                         <Badge variant={exp.sumber === 'ocr' ? 'sage' : 'neutral'}>
-                          {exp.sumber === 'ocr' ? 'OCR Nota' : 'Manual'}
+                          {exp.sumber === 'ocr' ? 'Foto nota' : 'Manual'}
                         </Badge>
                       </div>
                       <p className="text-xs text-forest-800/75">
@@ -127,7 +128,7 @@ export function ExpenseHistorySection({
                       </p>
                     </div>
                     <div className="flex items-center justify-between gap-3 sm:justify-end">
-                      <span className="text-base font-bold text-forest-900">
+                      <span className="font-sans text-base font-bold tabular-nums text-forest-900">
                         {formatRupiah(exp.total)}
                       </span>
                       {exp.bukti_url ? (
@@ -136,7 +137,7 @@ export function ExpenseHistorySection({
                           size="sm"
                           onClick={() => onSelectProofUrl(exp.bukti_url)}
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4" aria-hidden="true" />
                           <span>Bukti</span>
                         </Button>
                       ) : null}
@@ -151,9 +152,9 @@ export function ExpenseHistorySection({
 
       <div className="space-y-3 lg:col-span-4">
         <h2 className="font-display text-xl font-bold text-forest-900">
-          Harga Bahan Terkini
+          Harga bahan saat ini
         </h2>
-        <div className="divide-y divide-canvas-200 rounded-2xl border border-soga-600/35 bg-white p-4 shadow-soft">
+        <Card padding="sm" className="divide-y divide-canvas-200">
           {materials.map((mat) => (
             <div key={mat.id} className="py-3 first:pt-0 last:pb-0">
               <div className="flex items-center justify-between gap-2">
@@ -163,12 +164,15 @@ export function ExpenseHistorySection({
                 </Badge>
               </div>
               <p className="mt-0.5 text-xs text-forest-800/80">
-                Rata-rata bergerak: <strong>{formatRupiah(mat.harga_per_satuan)}</strong> /{' '}
-                {mat.satuan}
+                Harga rata-rata:{' '}
+                <strong className="tabular-nums text-forest-900">
+                  {formatRupiah(mat.harga_per_satuan)}
+                </strong>{' '}
+                / {mat.satuan}
               </p>
             </div>
           ))}
-        </div>
+        </Card>
       </div>
     </div>
   );

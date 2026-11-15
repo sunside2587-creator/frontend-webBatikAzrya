@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import {
   BookOpen,
   Calculator,
@@ -30,16 +31,16 @@ export const NAV_ITEMS: readonly NavItemConfig[] = [
   {
     id: ROUTES.POS,
     path: `/${ROUTES.POS}`,
-    label: 'POS Kasir & Margin',
-    sublabel: 'Catat Penjualan',
+    label: 'Kasir',
+    sublabel: 'Catat penjualan',
     icon: CreditCard,
     roles: ROUTE_ALLOWED_ROLES[ROUTES.POS],
   },
   {
     id: ROUTES.EXPENSES,
     path: `/${ROUTES.EXPENSES}`,
-    label: 'Pengeluaran & OCR',
-    sublabel: 'Scan Nota Bahan',
+    label: 'Nota Belanja',
+    sublabel: 'Foto dan simpan nota',
     icon: Receipt,
     roles: ROUTE_ALLOWED_ROLES[ROUTES.EXPENSES],
   },
@@ -47,15 +48,15 @@ export const NAV_ITEMS: readonly NavItemConfig[] = [
     id: ROUTES.HPP,
     path: `/${ROUTES.HPP}`,
     label: 'Kalkulator HPP',
-    sublabel: 'Resep & Anti-Rugi',
+    sublabel: 'Modal dan harga jual',
     icon: Calculator,
     roles: ROUTE_ALLOWED_ROLES[ROUTES.HPP],
   },
   {
     id: ROUTES.DASHBOARD,
     path: `/${ROUTES.DASHBOARD}`,
-    label: 'Dashboard & AI',
-    sublabel: 'Laba Rugi & Stok',
+    label: 'Laporan',
+    sublabel: 'Laba rugi dan stok',
     icon: LayoutDashboard,
     roles: ROUTE_ALLOWED_ROLES[ROUTES.DASHBOARD],
   },
@@ -87,6 +88,18 @@ export function Sidebar({
   onOpenGuide,
 }: SidebarProps) {
   const role: UserRole = user?.role || 'guest';
+  const mobileCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (!isMobileOpen) return undefined;
+
+    mobileCloseButtonRef.current?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onCloseMobile();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileOpen, onCloseMobile]);
 
   const handleSelectNav = (routeId: RouteId, mobileMode: boolean) => {
     onNavigate(routeId);
@@ -130,6 +143,7 @@ export function Sidebar({
 
           {mobileMode ? (
             <button
+              ref={mobileCloseButtonRef}
               type="button"
               onClick={onCloseMobile}
               aria-label="Tutup menu samping"
@@ -163,7 +177,7 @@ export function Sidebar({
         >
           {!collapsed ? (
             <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-widest text-soga-400/80">
-              Menu Utama
+              Menu
             </p>
           ) : null}
 
@@ -236,7 +250,7 @@ export function Sidebar({
             )}
           >
             <BookOpen className="h-4 w-4 shrink-0 text-soga-400" />
-            {!collapsed ? <span>Panduan Foto Nota &amp; Kasir</span> : null}
+            {!collapsed ? <span>Panduan Pengguna</span> : null}
           </button>
 
           {isAuthenticated && user ? (
@@ -254,7 +268,7 @@ export function Sidebar({
             >
               <LogOut className="h-4 w-4 shrink-0" />
               {!collapsed ? (
-                <span>Keluar ({user.role === 'owner' ? 'Pemilik' : 'Kasir'})</span>
+                <span>Keluar</span>
               ) : null}
             </button>
           ) : (
@@ -268,15 +282,9 @@ export function Sidebar({
               )}
             >
               <LogIn className="h-4 w-4 shrink-0" />
-              {!collapsed ? <span>Masuk ke Sistem</span> : null}
+              {!collapsed ? <span>Masuk</span> : null}
             </button>
           )}
-
-          {!collapsed ? (
-            <p className="px-2 pt-1 text-[11px] text-soga-400/75">
-              Azrya Batik • Probolinggo
-            </p>
-          ) : null}
         </div>
       </div>
     );
@@ -303,6 +311,8 @@ export function Sidebar({
           />
           <aside
             aria-label="Sidebar seluler"
+            role="dialog"
+            aria-modal="true"
             className="relative z-10 h-full w-72 max-w-[85vw] shadow-elevated"
           >
             {renderSidebarBody(true)}

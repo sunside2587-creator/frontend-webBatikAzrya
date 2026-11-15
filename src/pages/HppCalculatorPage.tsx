@@ -1,6 +1,8 @@
 import { Calculator, Plus, Trash2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { Card, CardHeader } from '../components/ui/Card';
 import { Input, NumberInput, Select } from '../components/ui/Input';
+import { PageHeader } from '../components/ui/PageHeader';
 import { HppSummaryCard } from '../features/hpp/HppSummaryCard';
 import { useHppFeature } from '../features/hpp/useHppFeature';
 import { cn } from '../utils/cn';
@@ -40,58 +42,55 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
 
   return (
     <section className={cn(!embedded && 'mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8')}>
-      <div className="mb-6 max-w-2xl space-y-1.5">
-        <HeadingTag className="font-display text-2xl font-bold text-forest-900 sm:text-3xl">
-          Kalkulator HPP Dinamis &amp; Peringatan Anti-Rugi
-        </HeadingTag>
-        <p className="text-sm leading-relaxed text-forest-800/85 sm:text-base">
-          Formula memperhitungkan Biaya Bahan (BB) dengan tingkat susut, Tenaga Kerja Langsung (TKL: canting, warna, lorod), Overhead Pabrik (BOP: penyusutan alat, gas, kemasan), serta Yield produksi.
-        </p>
-      </div>
+      <PageHeader
+        as={HeadingTag}
+        title="Kalkulator HPP"
+        description="Hitung modal per lembar dan harga jual minimum."
+      />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="space-y-5 lg:col-span-7">
-          <div className="flex flex-col justify-between gap-3 rounded-2xl border border-soga-600/40 bg-white p-4 shadow-soft sm:flex-row sm:items-center">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-forest-800/75">
-                Resep Aktif Terpilih:
-              </p>
-              <Select
-                id="hpp-recipe-select"
-                value={selectedRecipeId}
-                onChange={(e) => handleLoadRecipe(e.target.value)}
-                className="mt-1"
-              >
-                {recipes.map((rcp) => (
-                  <option key={rcp.id} value={rcp.id}>
-                    {rcp.nama_resep}
-                  </option>
-                ))}
-              </Select>
-            </div>
+          <Card
+            padding="sm"
+            className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"
+          >
+            <Select
+              id="hpp-recipe-select"
+              label="Resep produk"
+              value={selectedRecipeId}
+              onChange={(e) => handleLoadRecipe(e.target.value)}
+              className="min-w-0 flex-1"
+            >
+              {recipes.map((rcp) => (
+                <option key={rcp.id} value={rcp.id}>
+                  {rcp.nama_resep}
+                </option>
+              ))}
+            </Select>
             <Button
               variant="outline"
               size="sm"
               isLoading={isCalculating}
               onClick={handleRecalculateApi}
-              className="shrink-0 sm:mt-5"
+              className="shrink-0"
             >
-              <Calculator className="h-4 w-4" />
+              <Calculator className="h-4 w-4" aria-hidden="true" />
               <span>Hitung Ulang</span>
             </Button>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border border-soga-600/40 bg-white p-5 shadow-soft">
-            <div className="flex items-center justify-between gap-2 border-b border-canvas-200 pb-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-forest-900">
-                1. Biaya Bahan Baku (BB)
-              </h2>
-              <span className="text-sm font-bold text-forest-900">
-                Subtotal: {formatRupiah(result.bb)}
-              </span>
-            </div>
+          <Card>
+            <CardHeader
+              title="1. Bahan baku"
+              description="Kain mori, lilin malam, dan pewarna beserta persentase susut."
+              action={
+                <span className="font-sans text-sm font-bold tabular-nums text-forest-900">
+                  Subtotal: {formatRupiah(result.bb)}
+                </span>
+              }
+            />
 
-            <div className="mt-3 space-y-3">
+            <div className="mt-4 space-y-3">
               {bahan.map((item, idx) => {
                 const rowCost = Math.round(
                   (Number(item.pemakaian) || 0) *
@@ -111,7 +110,7 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
                         onChange={(e) => handleMaterialChange(idx, 'nama', e.target.value)}
                         className="w-full bg-transparent text-sm font-semibold text-forest-900 focus:outline-none"
                       />
-                      <span className="shrink-0 text-sm font-bold text-soga-900">
+                      <span className="shrink-0 font-sans text-sm font-bold tabular-nums text-forest-900">
                         {formatRupiah(rowCost)}
                       </span>
                     </div>
@@ -170,9 +169,9 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
                             type="button"
                             aria-label={`Hapus ${item.nama}`}
                             onClick={() => handleRemoveMaterial(idx)}
-                            className="mb-1 flex h-8 w-8 items-center justify-center rounded-md text-red-700 hover:bg-red-50"
+                            className="mb-1 flex h-8 w-8 items-center justify-center rounded-md text-danger-700 hover:bg-danger-50"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                           </button>
                         ) : null}
                       </div>
@@ -186,23 +185,24 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
                 onClick={handleAddMaterial}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-soga-900 hover:underline"
               >
-                <Plus className="h-3.5 w-3.5" />
-                <span>Tambah Komponen Bahan</span>
+                <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Tambah Bahan</span>
               </button>
             </div>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border border-soga-600/40 bg-white p-5 shadow-soft">
-            <div className="flex items-center justify-between gap-2 border-b border-canvas-200 pb-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-forest-900">
-                2. Tenaga Kerja Langsung (TKL)
-              </h2>
-              <span className="text-sm font-bold text-forest-900">
-                Subtotal: {formatRupiah(result.tkl)}
-              </span>
-            </div>
+          <Card>
+            <CardHeader
+              title="2. Tenaga kerja"
+              description="Upah membatik (canting), pewarnaan, dan melorod."
+              action={
+                <span className="font-sans text-sm font-bold tabular-nums text-forest-900">
+                  Subtotal: {formatRupiah(result.tkl)}
+                </span>
+              }
+            />
 
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               <Input
                 id="tkl-meter"
                 type="number"
@@ -242,19 +242,20 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
                 onChange={(e) => handleLaborChange('upah_lorod', e.target.value)}
               />
             </div>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border border-soga-600/40 bg-white p-5 shadow-soft">
-            <div className="flex items-center justify-between gap-2 border-b border-canvas-200 pb-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-forest-900">
-                3. Overhead Pabrik (BOP) &amp; Yield
-              </h2>
-              <span className="text-sm font-bold text-forest-900">
-                Subtotal: {formatRupiah(result.bop)}
-              </span>
-            </div>
+          <Card>
+            <CardHeader
+              title="3. Overhead & jumlah hasil"
+              description="Penyusutan alat, gas/energi, kemasan, dan jumlah lembar jadi per batch."
+              action={
+                <span className="font-sans text-sm font-bold tabular-nums text-forest-900">
+                  Subtotal: {formatRupiah(result.bop)}
+                </span>
+              }
+            />
 
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               <Input
                 id="bop-np"
                 type="number"
@@ -295,7 +296,7 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
                 type="number"
                 min="0"
                 step="1000"
-                label="Box & Kemasan Etnik"
+                label="Box & Kemasan"
                 value={overhead.kemasan}
                 onChange={(e) => handleOverheadChange('kemasan', e.target.value)}
               />
@@ -303,15 +304,18 @@ export function HppCalculatorPage({ embedded = false }: HppCalculatorPageProps) 
                 id="hpp-yield"
                 type="number"
                 min="1"
-                label="Yield (Hasil Lembar)"
+                label="Jumlah Hasil (lembar)"
                 value={yieldCount}
                 onChange={(e) => handleYieldChange(e.target.value)}
               />
             </div>
-            <p className="mt-2 text-xs text-forest-800/75">
-              Penyusutan alat per produk: <strong>{formatRupiah(result.penyusutan)}</strong>
+            <p className="mt-2.5 text-xs text-forest-800/75">
+              Penyusutan alat per produk:{' '}
+              <strong className="font-sans tabular-nums text-forest-900">
+                {formatRupiah(result.penyusutan)}
+              </strong>
             </p>
-          </div>
+          </Card>
         </div>
 
         <HppSummaryCard

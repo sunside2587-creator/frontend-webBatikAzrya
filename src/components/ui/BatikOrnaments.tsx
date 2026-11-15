@@ -14,20 +14,20 @@ export function BatikHeaderRibbon({
     <div
       aria-hidden="true"
       className={cn(
-        'relative h-8 w-full select-none overflow-hidden border-b',
-        isDark ? 'border-soga-600/35 bg-forest-900' : 'border-soga-600/25 bg-canvas-100',
+        'relative h-2.5 w-full select-none overflow-hidden',
+        isDark ? 'bg-forest-900' : 'bg-canvas-100',
         className
       )}
     >
       <div
-        className={cn('h-full w-full', isDark ? 'opacity-45' : 'opacity-50')}
+        className={cn('h-full w-full', isDark ? 'opacity-50' : 'opacity-60')}
         style={{
           backgroundImage: isDark
             ? "url('/assets/batik-header-trim-light.png')"
             : "url('/assets/batik-header-trim.png')",
           backgroundRepeat: 'repeat-x',
           backgroundPosition: 'center center',
-          backgroundSize: 'auto 20px',
+          backgroundSize: 'auto 10px',
         }}
       />
     </div>

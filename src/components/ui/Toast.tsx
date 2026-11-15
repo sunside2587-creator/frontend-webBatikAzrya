@@ -6,16 +6,16 @@ import { cn } from '../../utils/cn';
 
 const TOAST_STYLES: Record<ToastVariant, { container: string; icon: ReactNode }> = {
   success: {
-    container: 'border-sage-600 bg-forest-900 text-canvas-50',
-    icon: <CheckCircle2 className="h-5 w-5 shrink-0 text-sage-200" />,
+    container: 'border-success-600 bg-forest-900 text-canvas-50',
+    icon: <CheckCircle2 className="h-5 w-5 shrink-0 text-success-400" />,
   },
   warning: {
-    container: 'border-amber-500 bg-amber-50 text-amber-950',
-    icon: <AlertTriangle className="h-5 w-5 shrink-0 text-amber-700" />,
+    container: 'border-warning-500 bg-warning-50 text-warning-950',
+    icon: <AlertTriangle className="h-5 w-5 shrink-0 text-warning-700" />,
   },
   error: {
-    container: 'border-red-600 bg-red-50 text-red-900',
-    icon: <XCircle className="h-5 w-5 shrink-0 text-red-700" />,
+    container: 'border-danger-600 bg-danger-50 text-danger-900',
+    icon: <XCircle className="h-5 w-5 shrink-0 text-danger-700" />,
   },
 };
 

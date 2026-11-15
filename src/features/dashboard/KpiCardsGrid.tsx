@@ -1,3 +1,4 @@
+import { Card } from '../../components/ui/Card';
 import { KpiSkeletonGrid } from '../../components/ui/Skeleton';
 import type { DashboardSummaryMetrics } from '../../types';
 import { formatPercent, formatRupiah } from '../../utils/formatters';
@@ -14,55 +15,73 @@ export function KpiCardsGrid({ summary, isLoading }: KpiCardsGridProps) {
 
   const hppSharePct = summary.omzet > 0 ? (summary.hpp / summary.omzet) * 100 : 0;
 
+  const isGrowthNegative = summary.pertumbuhan_omzet.trim().startsWith('-');
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <div className="rounded-2xl border border-soga-600/35 bg-white p-5 shadow-soft">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-forest-800/75">
-          Omzet Penjualan
-        </p>
-        <p className="mt-2 font-display text-2xl font-bold text-forest-900">
+      <Card>
+        <p className="text-xs font-medium text-forest-800/75">Omzet penjualan</p>
+        <p className="mt-2 font-sans text-2xl font-bold tabular-nums text-forest-900">
           {formatRupiah(summary.omzet)}
         </p>
-        <p className="mt-1.5 text-xs font-semibold text-sage-600">
+        <p
+          className={`mt-1.5 text-xs font-medium tabular-nums ${
+            isGrowthNegative ? 'text-danger-700' : 'text-success-700'
+          }`}
+        >
           ↗ {summary.pertumbuhan_omzet}
         </p>
-      </div>
+      </Card>
 
-      <div className="rounded-2xl border border-soga-600/35 bg-white p-5 shadow-soft">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-forest-800/75">
-          Total HPP Terpakai
-        </p>
-        <p className="mt-2 font-display text-2xl font-bold text-soga-900">
+      <Card>
+        <p className="text-xs font-medium text-forest-800/75">Total HPP</p>
+        <p className="mt-2 font-sans text-2xl font-bold tabular-nums text-forest-900">
           {formatRupiah(summary.hpp)}
         </p>
-        <p className="mt-1.5 text-xs text-forest-800/75">
+        <p className="mt-1.5 text-xs font-medium tabular-nums text-forest-800">
           {formatPercent(hppSharePct)} dari omzet
         </p>
-      </div>
+      </Card>
 
-      <div className="rounded-2xl border border-soga-600/35 bg-white p-5 shadow-soft">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-forest-800/75">
-          Laba Kotor
-        </p>
-        <p className="mt-2 font-display text-2xl font-bold text-sage-600">
+      <Card>
+        <p className="text-xs font-medium text-forest-800/75">Laba kotor</p>
+        <p
+          className={`mt-2 font-sans text-2xl font-bold tabular-nums ${
+            summary.laba_kotor < 0 ? 'text-danger-700' : 'text-success-700'
+          }`}
+        >
           {formatRupiah(summary.laba_kotor)}
         </p>
-        <p className="mt-1.5 text-xs text-forest-800/75">
-          Margin Kotor: {formatPercent(summary.margin_kotor_persen)}
+        <p
+          className={`mt-1.5 text-xs font-medium tabular-nums ${
+            summary.margin_kotor_persen < 0
+              ? 'text-danger-700'
+              : summary.margin_kotor_persen < 20
+                ? 'text-warning-700'
+                : 'text-success-700'
+          }`}
+        >
+          Margin {formatPercent(summary.margin_kotor_persen)}
         </p>
-      </div>
+      </Card>
 
-      <div className="rounded-2xl border border-soga-600/35 bg-white p-5 shadow-soft">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-forest-800/75">
-          Laba Bersih Operasional
-        </p>
-        <p className="mt-2 font-display text-2xl font-bold text-forest-900">
+      <Card>
+        <p className="text-xs font-medium text-forest-800/75">Laba bersih</p>
+        <p
+          className={`mt-2 font-sans text-2xl font-bold tabular-nums ${
+            summary.laba_bersih < 0 ? 'text-danger-700' : 'text-forest-900'
+          }`}
+        >
           {formatRupiah(summary.laba_bersih)}
         </p>
-        <p className="mt-1.5 text-xs font-semibold text-sage-600">
+        <p
+          className={`mt-1.5 text-xs font-medium tabular-nums ${
+            summary.laba_bersih < 0 ? 'text-danger-700' : 'text-success-700'
+          }`}
+        >
           {summary.arus_kas_status}
         </p>
-      </div>
+      </Card>
     </div>
   );
 }
