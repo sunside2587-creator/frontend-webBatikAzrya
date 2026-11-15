@@ -3,11 +3,11 @@ import type { BadgeVariant } from '../../types';
 import { cn } from '../../utils/cn';
 
 const BADGE_VARIANTS: Record<BadgeVariant, string> = {
-  sage: 'border-sage-400/60 bg-sage-200/70 text-forest-900',
+  sage: 'border-success-300 bg-success-100 text-success-800',
   forest: 'border-forest-800 bg-forest-900 text-canvas-50',
   soga: 'border-soga-600/40 bg-soga-900/10 text-soga-900',
-  warning: 'border-amber-400 bg-amber-100 text-amber-900',
-  danger: 'border-red-300 bg-red-100 text-red-800',
+  warning: 'border-warning-400 bg-warning-100 text-warning-900',
+  danger: 'border-danger-300 bg-danger-100 text-danger-800',
   neutral: 'border-soga-400/60 bg-canvas-100 text-forest-800',
 };
 

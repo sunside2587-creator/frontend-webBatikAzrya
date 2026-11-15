@@ -14,6 +14,7 @@ import {
   Send,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
 import { BUSINESS_CONSTANTS, SAMPLE_RAG_QUESTIONS } from '../../constants';
 import type { RagChatMessage } from '../../types';
 import { cn } from '../../utils/cn';
@@ -70,23 +71,23 @@ export function RagAssistantCard({
   };
 
   return (
-    <div
+    <Card
       className={cn(
-        'flex flex-col rounded-2xl border border-soga-600/40 bg-white p-5 shadow-card transition-all',
+        'flex flex-col transition-all',
         isExpanded ? 'lg:col-span-12' : 'lg:col-span-7'
       )}
     >
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-canvas-200 pb-3">
         <div className="flex min-w-0 items-center gap-2.5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-soga-900 text-canvas-50">
-            <MessageSquare className="h-4 w-4" />
+            <MessageSquare className="h-4 w-4" aria-hidden="true" />
           </div>
           <div className="min-w-0">
-            <h2 className="font-display text-base font-bold text-forest-900">
-              Asisten Tanya-Jawab Finansial Azrya (RAG)
+            <h2 className="font-display text-lg font-semibold text-forest-900">
+              Tanya Data Azrya
             </h2>
             <p className="text-xs text-forest-800/75">
-              Memahami konteks HPP, laporan keuangan, stok batik, dan panduan aplikasi
+              Tanyakan stok bahan, HPP, atau laba rugi bulan ini.
             </p>
           </div>
         </div>
@@ -94,9 +95,9 @@ export function RagAssistantCard({
         <button
           type="button"
           onClick={onToggleExpand}
-          aria-label={isExpanded ? 'Perkecil kartu asisten RAG' : 'Perbesar kartu asisten RAG'}
+          aria-label={isExpanded ? 'Perkecil kartu asisten' : 'Perbesar kartu asisten'}
           aria-pressed={isExpanded}
-          title={isExpanded ? 'Perkecil tampilan RAG' : 'Perbesar tampilan RAG'}
+          title={isExpanded ? 'Perkecil tampilan' : 'Perbesar tampilan'}
           className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg border border-soga-400/60 bg-canvas-50 px-2.5 py-1.5 text-xs font-semibold text-forest-900 transition-colors hover:bg-canvas-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-soga-700"
         >
           {isExpanded ? (
@@ -148,8 +149,8 @@ export function RagAssistantCard({
           >
             {msg.sender === 'assistant' ? (
               <div className="mb-1 flex items-center gap-1.5 text-[11px] font-bold text-soga-900">
-                <Bot className="h-3.5 w-3.5" />
-                <span>Asisten Azrya ({msg.intent || 'rag'})</span>
+                <Bot className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Asisten Azrya</span>
               </div>
             ) : null}
             <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{msg.text}</p>
@@ -162,8 +163,8 @@ export function RagAssistantCard({
         ))}
         {isChatLoading ? (
           <div className="flex items-center gap-2 text-xs text-soga-900">
-            <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-            <span>Menyusun jawaban dari data Azrya Batik...</span>
+            <RefreshCw className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+            <span>Mencari data Azrya Batik...</span>
           </div>
         ) : null}
       </div>
@@ -175,7 +176,7 @@ export function RagAssistantCard({
           value={chatInput}
           onChange={(e) => onChangeChatInput(e.target.value)}
           onKeyDown={handleTextareaKeyDown}
-          placeholder="Ketik pertanyaan seputar HPP atau laporan kas Azrya..."
+          placeholder="Ketik pertanyaan seputar HPP atau kas Azrya..."
           aria-label="Pertanyaan untuk asisten finansial"
           className="min-h-11 min-w-0 flex-1 resize-none rounded-xl border border-soga-400/70 bg-white px-3.5 py-2.5 text-sm leading-relaxed text-forest-900 placeholder:text-soga-400 [overflow-wrap:anywhere] focus:outline-none focus:ring-2 focus:ring-soga-700 sm:text-base"
         />
@@ -194,6 +195,6 @@ export function RagAssistantCard({
       <p className="mt-1.5 text-[11px] text-forest-800/65">
         Tekan Enter untuk mengirim, Shift + Enter untuk baris baru.
       </p>
-    </div>
+    </Card>
   );
 }

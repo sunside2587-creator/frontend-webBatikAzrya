@@ -123,3 +123,7 @@ Saat dijalankan tanpa backend aktif, Anda dapat langsung menguji seluruh fitur m
 
 ## Deployment
 
+Proyek ini telah dilengkapi konfigurasi *SPA routing rewrite* agar navigasi halaman tetap berfungsi saat di-*refresh* pada berbagai platform hosting:
+- **Vercel:** Terkonfigurasi melalui `vercel.json`
+- **Netlify / Cloudflare Pages / Render:** Terkonfigurasi melalui `public/_redirects`
+- **VS Code Live Server:** Mendukung pembukaan langsung `index.html` setelah menjalankan `npm run build`

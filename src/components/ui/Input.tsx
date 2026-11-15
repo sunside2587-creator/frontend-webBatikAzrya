@@ -208,7 +208,7 @@ export function Input({
         className={cn(
           'flex min-h-11 items-center rounded-lg border bg-white px-3 transition-colors focus-within:ring-2 focus-within:ring-soga-700',
           error
-            ? 'border-red-600 bg-red-50/40 focus-within:ring-red-500'
+            ? 'border-danger-600 bg-danger-50/40 focus-within:ring-danger-500'
             : 'border-soga-400/70 hover:border-soga-600'
         )}
       >
@@ -241,7 +241,7 @@ export function Input({
         ) : null}
       </div>
       {error ? (
-        <p role="alert" className="text-xs font-medium text-red-700">
+        <p role="alert" className="text-xs font-medium text-danger-700">
           {error}
         </p>
       ) : helperText ? (
@@ -279,14 +279,14 @@ export function Select({
         id={id}
         className={cn(
           'min-h-11 w-full rounded-lg border bg-white px-3 py-2 text-base text-forest-900 transition-colors focus:outline-none focus:ring-2 focus:ring-soga-700',
-          error ? 'border-red-600' : 'border-soga-400/70 hover:border-soga-600'
+          error ? 'border-danger-600' : 'border-soga-400/70 hover:border-soga-600'
         )}
         {...props}
       >
         {children}
       </select>
       {error ? (
-        <p role="alert" className="text-xs font-medium text-red-700">
+        <p role="alert" className="text-xs font-medium text-danger-700">
           {error}
         </p>
       ) : helperText ? (

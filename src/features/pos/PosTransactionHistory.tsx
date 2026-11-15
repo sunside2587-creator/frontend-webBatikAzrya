@@ -4,7 +4,7 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { ScrollspyBar } from '../../components/ui/ScrollspyBar';
 import { TableSkeleton } from '../../components/ui/Skeleton';
-import { PAYMENT_STATUS_GROUPS } from '../../constants';
+import { BUSINESS_CONSTANTS, PAYMENT_STATUS_GROUPS } from '../../constants';
 import { useScrollspyGroups } from '../../hooks/useScrollspyGroups';
 import type { Transaction } from '../../types';
 import { cn } from '../../utils/cn';
@@ -73,7 +73,7 @@ export function PosTransactionHistory({
     <div className="mt-10 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-display text-xl font-bold text-forest-900">
-          Riwayat Transaksi Kasir
+          Riwayat transaksi
         </h2>
         <div className="flex flex-wrap gap-2">
           {SEGMENT_FILTER_TABS.map((seg) => (
@@ -81,6 +81,7 @@ export function PosTransactionHistory({
               key={seg}
               type="button"
               onClick={() => onChangeFilterSegmen(seg)}
+              aria-pressed={filterSegmen === seg}
               className={cn(
                 'min-h-10 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors',
                 filterSegmen === seg
@@ -88,7 +89,7 @@ export function PosTransactionHistory({
                   : 'border-soga-400/70 bg-white text-forest-900 hover:bg-canvas-100'
               )}
             >
-              {seg === 'ALL' ? 'Semua Segmen' : seg}
+              {seg === 'ALL' ? 'Semua' : seg}
             </button>
           ))}
         </div>
@@ -99,7 +100,7 @@ export function PosTransactionHistory({
       {!isLoading && transactions.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-soga-600/50 bg-white p-8 text-center">
           <p className="text-sm font-medium text-forest-800">
-            Belum ada transaksi tercatat pada filter segmen ini.
+            Belum ada transaksi untuk segmen ini.
           </p>
         </div>
       ) : null}
@@ -114,7 +115,7 @@ export function PosTransactionHistory({
               scrollProgress={scrollProgress}
               groups={scrollspyGroups}
               activeGroupKey={activeGroupKey}
-              ariaLabel="Navigasi Scrollspy status pembayaran transaksi"
+              ariaLabel="Lompat ke status pembayaran"
               onSelectGroup={handleJumpToGroup}
             />
           ) : null}
@@ -126,7 +127,7 @@ export function PosTransactionHistory({
             onTouchMove={clearProgrammaticSpy}
             onPointerDown={clearProgrammaticSpy}
             className={cn(
-              'hidden rounded-2xl border border-soga-600/35 bg-white shadow-soft md:block',
+              'hidden rounded-2xl border border-soga-600/30 bg-white shadow-soft md:block',
               isScrollspyActive
                 ? 'max-h-[440px] overflow-x-auto overflow-y-auto scroll-smooth'
                 : 'overflow-hidden'
@@ -183,8 +184,18 @@ export function PosTransactionHistory({
                         <Badge variant={statusMeta.badgeVariant}>{statusMeta.label}</Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <p className="font-bold text-forest-900">{formatRupiah(trx.total)}</p>
-                        <p className="text-xs font-medium text-sage-600">
+                        <p className="font-sans font-bold tabular-nums text-forest-900">
+                          {formatRupiah(trx.total)}
+                        </p>
+                        <p
+                          className={`text-xs font-medium tabular-nums ${
+                            trx.margin_nominal < 0
+                              ? 'text-danger-700'
+                              : trx.margin_persen < BUSINESS_CONSTANTS.HEALTHY_MARGIN_PCT
+                                ? 'text-warning-700'
+                                : 'text-success-700'
+                          }`}
+                        >
                           Margin {formatRupiah(trx.margin_nominal)} (
                           {formatPercent(trx.margin_persen)})
                         </p>
@@ -228,7 +239,7 @@ export function PosTransactionHistory({
                   }}
                   className={cn(
                     'rounded-xl border bg-white p-4 shadow-soft transition-colors',
-                    isSpyRow ? 'border-soga-700 bg-canvas-50' : 'border-soga-600/35'
+                    isSpyRow ? 'border-soga-700 bg-canvas-50' : 'border-soga-600/30'
                   )}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -245,10 +256,18 @@ export function PosTransactionHistory({
                   </div>
                   <div className="mt-3 flex items-center justify-between border-t border-canvas-200 pt-3">
                     <div>
-                      <p className="text-base font-bold text-forest-900">
+                      <p className="font-sans text-base font-bold tabular-nums text-forest-900">
                         {formatRupiah(trx.total)}
                       </p>
-                      <p className="text-xs text-sage-600">
+                      <p
+                        className={`text-xs font-medium tabular-nums ${
+                          trx.margin_nominal < 0
+                            ? 'text-danger-700'
+                            : trx.margin_persen < BUSINESS_CONSTANTS.HEALTHY_MARGIN_PCT
+                              ? 'text-warning-700'
+                              : 'text-success-700'
+                        }`}
+                      >
                         Laba kotor {formatRupiah(trx.margin_nominal)}
                       </p>
                     </div>
