@@ -116,10 +116,10 @@ export function ExpenseHistorySection({
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-semibold text-forest-900">{exp.toko}</span>
-                        <Badge variant={categoryMeta.badgeVariant}>
+                        <Badge variant="soga">
                           {categoryMeta.label}
                         </Badge>
-                        <Badge variant={exp.sumber === 'ocr' ? 'sage' : 'neutral'}>
+                        <Badge variant="neutral">
                           {exp.sumber === 'ocr' ? 'Foto nota' : 'Manual'}
                         </Badge>
                       </div>
@@ -159,7 +159,7 @@ export function ExpenseHistorySection({
             <div key={mat.id} className="py-3 first:pt-0 last:pb-0">
               <div className="flex items-center justify-between gap-2">
                 <p className="text-sm font-semibold text-forest-900">{mat.nama}</p>
-                <Badge variant={mat.stok_saat_ini < mat.stok_minimum ? 'warning' : 'sage'}>
+                <Badge variant="neutral">
                   {mat.stok_saat_ini} {mat.satuan}
                 </Badge>
               </div>
